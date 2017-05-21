@@ -1,2 +1,1 @@
-# CIS263-StacksQueuesTrees
-Project for practice with simple data structures.
+# CIS263 Stacks, Queues, and Trees
