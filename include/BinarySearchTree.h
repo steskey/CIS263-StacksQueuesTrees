@@ -3,6 +3,11 @@
 
 #include "dsexceptions.h"
 #include <algorithm>
+
+// NEVER DO THIS!  EVER!
+// THIS CODE USES NAMESPACE ONLY
+// BECAUSE IT MADE PRINTING IN
+// THE TEXTBOOK EASIER TO READ
 using namespace std;       
 
 // BinarySearchTree class
