@@ -3,7 +3,6 @@
 #include <string>
 #include "catch.hpp"
 #include "functions.h"
-#include "Node.h"
 
 TEST_CASE( "Balanced test", "[stack]" ){
 	std::string expression;
