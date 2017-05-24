@@ -19,6 +19,5 @@ TEST_CASE( "Balanced test", "[stack]" ){
 		expression+=ch;
 	}
 	CHECK ( !balanced(expression) );
-}
 
 }
