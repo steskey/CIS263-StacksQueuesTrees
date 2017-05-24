@@ -21,13 +21,4 @@ TEST_CASE( "Balanced test", "[stack]" ){
 	CHECK ( !balanced(expression) );
 }
 
-TEST_CASE( "Evaluate expression test", "[bt]" ){
-	Node<char>* root = new Node;
-	root->data = "+";
-	Node<char>* lc = new Node;
-	lc->data = "3";
-	Node<char>* rc = new Node;
-	rc->data = "11";
-	root->lc = lc;
-	root->rc = rc;	
 }
