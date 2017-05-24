@@ -3,21 +3,32 @@
 #include <string>
 #include "catch.hpp"
 #include "functions.h"
-#include "BinarySearchTree.h"
+#include "Node.h"
 
 TEST_CASE( "Balanced test", "[stack]" ){
 	std::string expression;
 	char ch;
 	std::fstream fin("./data/one.txt", std::fstream::in);
-	while(fin >> noskipws >> ch){
+	while(fin >> std::noskipws >> ch){
 		expression+=ch;
 	}
 	CHECK( balanced(expression) );
 
 	expression = "";	
 	std::fstream fin2("./data/two.txt", std::fstream::in);
-	while(fin2 >> noskipws >> ch){
+	while(fin2 >> std::noskipws >> ch){
 		expression+=ch;
 	}
 	CHECK ( !balanced(expression) );
+}
+
+TEST_CASE( "Evaluate expression test", "[bt]" ){
+	Node<char>* root = new Node;
+	root->data = "+";
+	Node<char>* lc = new Node;
+	lc->data = "3";
+	Node<char>* rc = new Node;
+	rc->data = "11";
+	root->lc = lc;
+	root->rc = rc;	
 }
