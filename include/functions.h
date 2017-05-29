@@ -16,6 +16,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <stack>
 
 /**
  * This function uses an array-based stack to determine if
@@ -30,77 +31,85 @@
  * https://stackoverflow.com/questions/1315041
  *      /how-can-i-iterate-through-a-string
  *      -and-also-know-the-index-current-position 
+ * http://www.cplusplus.com/reference/stack/stack/ 
  */
 bool balanced(std::string expression){
 
     // Characters that will be treated as brackets
-    static const char* RHOMBUS = "▰";
-    static const char* TRIANGLE = "▲";
-    static const char* CIRCLE = "◯";
+    static const char* RHOMBUS = u8"\u25b0"; //"▰";
+    static const char* TRIANGLE = u8"\u25b2"; //"▲";
+    static const char* CIRCLE = u8"\u25cb"; //"◯";
 
     // Get the size of the special characters 
-    int charSize2 = sizeof(RHOMBUS)/sizeof(RHOMBUS[0]);
-    std::cout << "Character size: " << charSize2 << std::endl;
-    int charSize = std::char_traits<char>::length(RHOMBUS);
-    std::cout << "Character size from length: " << charSize << std::endl;
-
+    int charSize = std::char_traits<char>::length(CIRCLE);
+    //int charSize = sizeof(CIRCLE);
+    std::cout << "Character size: " << charSize << std::endl;
     // Create a char array with a max capacity equal to the string 
-    char charStack[expression.length()][charSize];
+    //char charStack[expression.length()][charSize];
     //char charStack[charSize][expression.length()];
 
-    // Track the current size of our stack
-    int stackSize = 0;
-   
-    // Iterate through the all the chars in the string 
-    for(auto it = expression.begin(); it != expression.end(); ++it){
+    // Create a stack to hold chars as we process them
+    std::stack<char*, std::vector<char*> > charStack;
 
+    // Track the current size of our stack
+    //int stackSize = 0;
+ 
+    // Iterate through all the chars in the string
+    for(auto it = expression.begin(); it != expression.end(); ++it){
         // Obtain the current index as the distance from the start
         int index = std::distance(expression.begin(), it);
-
-        // Obtain the substring that encompasses a special character
+        // Obtain the substring just large enough for these characters
         std::string charSubStr = expression.substr(index, charSize);
+    
 
         // Only process the bracket-type characters
-        if(0 == charSubStr.compare(0, charSize, RHOMBUS) || 0 == charSubStr.compare\
-                (0, charSize, TRIANGLE) || 0 == charSubStr.compare(0, charSize, CIRCLE)){
-           
-            std::cout << "Current substring: " << charSubStr << std::endl;
-           
-            // If this character is on the top of the stack, pop it
-            if(stackSize > 0){
-                if(0 == charSubStr.compare(0, charSize, charStack[(stackSize - 1)*charSize])){
-                    std::cout << "Popped substring!" << std::endl;
-                    --stackSize;
-                    continue;
+        if(0 == charSubStr.compare(0, charSize, RHOMBUS, 0, charSize) || 0 == charSubStr.compare(0, charSize, TRIANGLE, 0, charSize) || 0 == charSubStr.compare(0, charSize, CIRCLE, 0, charSize)){
+            // Check if we have something on the stack
+            if(charStack.size() > 0){
+                if(0 == charSubStr.compare(0, charSize, charStack.top(), 0, charSize)){
+                    // If the characters match, pop the stack
+                    char* popped = charStack.top();
+                    std::cout << "Popping: " << std::string(popped) << std::endl;;
+                    charStack.pop();
+                    delete[] popped;
+                    continue; 
                 }
             }
-            // Otherwise, push the character onto the stack
-            charSubStr.copy(charStack[stackSize*charSize], charSize);
-            ++stackSize;
-            std::cout << "Pushed substring!" << std::endl;
-            std::cout << "Contents: " << charStack[(stackSize - 1)*charSize] << std::endl;
+            // If they don't match, push the character onto the stack
+            char* pushChar = new char[charSize];
+            std::cout << "Pushing: " << std::string(pushChar) << std::endl;
+            charSubStr.copy(pushChar, charSize);  
+            charStack.push(pushChar);
         }
-        else{
-            //std::cout << "Not a bracket char" << std::endl;
-        } 
-    } 
-   
-    // If expression is balanced, no chars should be left on the stack
-    std::cout << "Ending stack: " << std::endl;
-    for(int i = 0; i < stackSize * charSize; i += charSize)
-    {
-        std::cout << charStack[i] << std::endl; 
     }
-    std::cout << "Stack size: " << stackSize << std::endl;
-    return (0 == stackSize);
+    
+    // If the expression is balanced, no chars should be left
+    if (charStack.empty()){
+        return true;
+    }
+
+    // We will need to free up the memory if the above is not true
+    std::cout << "Stack not empty: " << std::endl;
+    while(!charStack.empty()){
+        char* popped = charStack.top();
+        std::cout << std::string(popped) << std::endl;
+        charStack.pop();
+        delete[] popped;
+    }
+
+    return false;
 }
 
 /**
  *
+ * Sources used:
+ * http://www.cplusplus.com/reference/vector/vector/ 
  */
 template <typename T>
 bool palindrome(std::vector<T> v){
 
+
+    return true;
 }
 
 #endif
