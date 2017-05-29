@@ -44,16 +44,10 @@ bool balanced(std::string expression){
     int charSize = std::char_traits<char>::length(CIRCLE);
     //int charSize = sizeof(CIRCLE);
     std::cout << "Character size: " << charSize << std::endl;
-    // Create a char array with a max capacity equal to the string 
-    //char charStack[expression.length()][charSize];
-    //char charStack[charSize][expression.length()];
 
     // Create a stack to hold chars as we process them
     std::stack<char*, std::vector<char*> > charStack;
 
-    // Track the current size of our stack
-    //int stackSize = 0;
- 
     // Iterate through all the chars in the string
     for(auto it = expression.begin(); it != expression.end(); ++it){
         // Obtain the current index as the distance from the start
@@ -62,25 +56,38 @@ bool balanced(std::string expression){
         std::string charSubStr = expression.substr(index, charSize);
     
 
+        char currChar[charSize];
         // Only process the bracket-type characters
-        if(0 == charSubStr.compare(0, charSize, RHOMBUS, 0, charSize) || 0 == charSubStr.compare(0, charSize, TRIANGLE, 0, charSize) || 0 == charSubStr.compare(0, charSize, CIRCLE, 0, charSize)){
-            // Check if we have something on the stack
-            if(charStack.size() > 0){
-                if(0 == charSubStr.compare(0, charSize, charStack.top(), 0, charSize)){
-                    // If the characters match, pop the stack
-                    char* popped = charStack.top();
-                    std::cout << "Popping: " << std::string(popped) << std::endl;;
-                    charStack.pop();
-                    delete[] popped;
-                    continue; 
-                }
-            }
-            // If they don't match, push the character onto the stack
-            char* pushChar = new char[charSize];
-            std::cout << "Pushing: " << std::string(pushChar) << std::endl;
-            charSubStr.copy(pushChar, charSize);  
-            charStack.push(pushChar);
+        if(0 == charSubStr.compare(0, charSize, RHOMBUS)){
+            strcpy(currChar, RHOMBUS); 
         }
+        else if(0 == charSubStr.compare(0, charSize, TRIANGLE)){
+            strcpy(currChar, TRIANGLE); 
+        }
+        else if(0 == charSubStr.compare(0, charSize, CIRCLE)){
+            strcpy(currChar, CIRCLE); 
+        }
+        else{
+            continue;
+        }
+
+        // Check if we have something on the stack
+        if(charStack.size() > 0){
+            // If the characters match, pop the stack
+            if(0 == strcmp(currChar, charStack.top())){ 
+                char* popped = charStack.top();
+                std::cout << "Popping: " << popped << std::endl;
+                charStack.pop();
+                delete[] popped;
+                continue;
+            }
+        }
+
+        // If they don't match, push the character onto the stack
+        char* pushChar = new char[charSize];
+        strcpy(pushChar, currChar); 
+        charStack.push(pushChar);
+        std::cout << "Pushing: " << std::string(pushChar) << std::endl;
     }
     
     // If the expression is balanced, no chars should be left
