@@ -20,7 +20,7 @@
 #include <queue>
 
 /**
- * This function uses an array-based stack to determine if
+ * This function uses a vector-based stack to determine if
  * a given string contains valid use of 'bracket' symbols
  * to enclose sub-expressions. The symbols ▰, ▲, and ◯ must
  * appear in pairs in order for the function to return true.
@@ -43,12 +43,25 @@ bool balanced(std::string expression){
 
     // Get the size of the special characters 
     int charSize = std::char_traits<char>::length(CIRCLE);
-    //int charSize = sizeof(CIRCLE);
-    std::cout << "Character size: " << charSize << std::endl;
+   
+    // Uncomment to debug character size
+    //std::cout << "Character size: " << charSize << std::endl;
 
     // Create a stack to hold chars as we process them
     std::stack<char*, std::vector<char*> > charStack;
-
+    
+    // Uncomment the function to get stack contents for error checking
+    /*
+    auto asStr = [](std::stack<char*, std::vector<char*> > stackCpy){
+        std::string stackStr;
+        while(!stackCpy.empty()){
+            stackStr.insert(0, stackCpy.top());
+            stackCpy.pop();
+        }
+        return stackStr;
+    };
+    */
+    
     // Iterate through all the chars in the string
     for(auto it = expression.begin(); it != expression.end(); ++it){
         // Obtain the current index as the distance from the start
@@ -77,8 +90,8 @@ bool balanced(std::string expression){
             // If the characters match, pop the stack
             if(0 == strcmp(currChar, charStack.top())){ 
                 char* popped = charStack.top();
-                std::cout << "Popping: " << popped << std::endl;
                 charStack.pop();
+                //std::cout << "Popped, current stack: " << asStr(charStack) << std::endl;
                 delete[] popped;
                 continue;
             }
@@ -88,11 +101,12 @@ bool balanced(std::string expression){
         char* pushChar = new char[charSize];
         strcpy(pushChar, currChar); 
         charStack.push(pushChar);
-        std::cout << "Pushing: " << std::string(pushChar) << std::endl;
+        //std::cout << "Pushed, current stack: " << asStr(charStack) << std::endl;
     }
     
     // If the expression is balanced, no chars should be left
     if (charStack.empty()){
+        std::cout << "Stack is empty." << std::endl;
         return true;
     }
 
@@ -109,7 +123,19 @@ bool balanced(std::string expression){
 }
 
 /**
- *
+ * This function determines if a vector of generic
+ * objects matches the palindrome pattern. It creates
+ * a standard stack and queue, then iterates through
+ * the vector in order to push copies of these objects
+ * onto the stack and the queue. After this, objects
+ * are popped off the stack and queue and compared.
+ * Because the stack is FILO (first in last out), 
+ * the order of the objects ends up reversed from
+ * the queue. This means the front is compared to the
+ * back. If all popped objects are found to be
+ * equivalent, it means that the original vector
+ * is the same forward and backwards -- i.e., it is
+ * a palindrome.  
  * Sources used:
  * http://www.cplusplus.com/reference/vector/vector/ 
  * http://www.cplusplus.com/reference/stack/stack/ 
