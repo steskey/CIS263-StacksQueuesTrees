@@ -17,6 +17,7 @@
 #include <vector>
 #include <iostream>
 #include <stack>
+#include <queue>
 
 /**
  * This function uses an array-based stack to determine if
@@ -111,11 +112,36 @@ bool balanced(std::string expression){
  *
  * Sources used:
  * http://www.cplusplus.com/reference/vector/vector/ 
+ * http://www.cplusplus.com/reference/stack/stack/ 
+ * http://www.cplusplus.com/reference/queue/queue/
  */
 template <typename T>
 bool palindrome(std::vector<T> v){
+    // Create a stack (FILO) 
+    std::stack<T> myStack;
+    // Create a queue (FIFO)
+    std::queue<T> myQueue;
 
-
+    // Fill both with the contents of the vector
+    for(auto it = v.begin(); it != v.end(); ++it){
+        myStack.push(*it);
+        myQueue.push(*it);
+    }
+    
+    // Pop the top of the stack and the front of the queue 
+    while(!myQueue.empty() && !myStack.empty()){
+        T front = myQueue.front();
+        myQueue.pop();
+        T top = myStack.top();
+        myStack.pop(); 
+        
+       // These should be the same in a palindrome
+       if(front != top){
+           return false;
+       } 
+    }
+    // If the contents were equivalent backward (stack) and forward
+    // (queue), we have a palindrome. 
     return true;
 }
 
